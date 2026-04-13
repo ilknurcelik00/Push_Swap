@@ -1,9 +1,5 @@
 #include "push_swap.h"
 
-/*
-** ft_strlen — string uzunluğu
-** Kullanım: argüman kontrolünde boş string tespiti için
-*/
 int     ft_strlen(const char *s)
 {
     int i;
@@ -14,10 +10,6 @@ int     ft_strlen(const char *s)
     return (i);
 }
 
-/*
-** ft_strncmp — iki string'i n karaktere kadar karşılaştır
-** Kullanım: --simple, --medium, --complex, --adaptive flag kontrolü
-*/
 int     ft_strncmp(const char *s1, const char *s2, int n)
 {
     int i;
@@ -32,26 +24,34 @@ int     ft_strncmp(const char *s1, const char *s2, int n)
     return (0);
 }
 
-/*
-** ft_putchar_fd — tek karakter yaz
-** Kullanım: ft_putstr_fd'nin temel yapı taşı
-*/
 void    ft_putchar_fd(char c, int fd)
 {
     write(fd, &c, 1);
 }
 
-/*
-** ft_putstr_fd — string yaz (belirli fd'ye)
-** Kullanım: error_exit() içinde "Error\n" → stderr (fd=2)
-**           checker bonus'unda "OK\n" / "KO\n" → stdout (fd=1)
-*/
 void    ft_putstr_fd(char *s, int fd)
 {
     if (!s)
         return ;
     while (*s)
         ft_putchar_fd(*s++, fd);
+}
+
+void    ft_putnbr_fd(int n, int fd)
+{
+    long    nb;
+    char    c;
+
+    nb = (long)n;
+    if (nb < 0)
+    {
+        ft_putchar_fd('-', fd);
+        nb = -nb;
+    }
+    if (nb >= 10)
+        ft_putnbr_fd((int)(nb / 10), fd);
+    c = (char)(nb % 10 + '0');
+    ft_putchar_fd(c, fd);
 }
 
 void    ft_parse_int(const char *str, int *result, t_stack **a)
@@ -76,7 +76,9 @@ void    ft_parse_int(const char *str, int *result, t_stack **a)
     while (str[i] >= '0' && str[i] <= '9')
     {
         val = val * 10 + (str[i] - '0');
-        if (val * sign > INT_MAX || val * sign < INT_MIN)
+        if (sign == 1 && val > 2147483647)
+            error_exit(a, NULL);
+        if (sign == -1 && val > 2147483648L)
             error_exit(a, NULL);
         i++;
     }
