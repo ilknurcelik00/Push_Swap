@@ -43,19 +43,55 @@ static int  is_mode_flag(char *arg)
     return (0);
 }
 
+/*
+** parse_token: tek bir token'ı işle (boşlukla ayrılmış sayı)
+** token boşluk içeriyorsa alt token'lara böl, her birini stack'e ekle
+*/
+static void parse_token(char *token, t_stack **a)
+{
+    int     i;
+    int     start;
+    char    tmp[32];
+    int     val;
+    int     k;
+
+    i = 0;
+    while (token[i])
+    {
+        while (token[i] == ' ' || token[i] == '\t')
+            i++;
+        if (!token[i])
+            break ;
+        start = i;
+        if (token[i] == '-' || token[i] == '+')
+            i++;
+        if (!token[i] || token[i] < '0' || token[i] > '9')
+            error_exit(a, NULL);
+        while (token[i] >= '0' && token[i] <= '9')
+            i++;
+        if (token[i] != '\0' && token[i] != ' ' && token[i] != '\t')
+            error_exit(a, NULL);
+        k = 0;
+        while (start < i)
+            tmp[k++] = token[start++];
+        tmp[k] = '\0';
+        ft_parse_int(tmp, &val, a);
+        if (is_duplicate(*a, val))
+            error_exit(a, NULL);
+        push_front(a, new_node(val));
+    }
+}
+
 void    parse_args(int argc, char **argv, t_stack **a,
                     char **strategy, int *count_only, int *bench_mode)
 {
     int     i;
-    int     start;
-    int     val;
 
     if (argc == 1)
         exit(0);
     *strategy = "--adaptive";
     *count_only = 0;
     *bench_mode = 0;
-    start = 1;
     i = 1;
     while (i < argc && (parse_strategy(argv[i]) || is_mode_flag(argv[i])))
     {
@@ -67,16 +103,11 @@ void    parse_args(int argc, char **argv, t_stack **a,
             *count_only = 1;
         i++;
     }
-    start = i;
-    if (start >= argc)
+    if (i >= argc)
         exit(0);
-    i = start;
     while (i < argc)
     {
-        ft_parse_int(argv[i], &val, a);
-        if (is_duplicate(*a, val))
-            error_exit(a, NULL);
-        push_front(a, new_node(val));
+        parse_token(argv[i], a);
         i++;
     }
     reverse_stack(a);
