@@ -47,9 +47,14 @@ static int  is_blank_token(char *token)
 {
     int i;
 
+    // Boş string "" kontrolü
+    if (!token || token[0] == '\0')
+        return (1);
     i = 0;
-    while (token[i] == ' ' || token[i] == '\t')
+    // Sadece boşlukları kontrol et (Tab YOK)
+    while (token[i] == ' ')
         i++;
+    // Sadece boşluklardan oluşuyorsa 1 döner (Error verecek)
     return (token[i] == '\0');
 }
 
@@ -66,19 +71,26 @@ static void parse_token(char *token, t_stack **a)
     i = 0;
     while (token[i])
     {
-        while (token[i] == ' ' || token[i] == '\t')
+        // Sayıları ayırırken SADECE boşluğu atla
+        while (token[i] == ' ')
             i++;
         if (!token[i])
             break ;
         start = i;
         if (token[i] == '-' || token[i] == '+')
             i++;
+            
+        // Sayı dışında bir şey varsa (Tab dahil) -> Error
         if (!token[i] || token[i] < '0' || token[i] > '9')
             error_exit(a, NULL);
+            
         while (token[i] >= '0' && token[i] <= '9')
             i++;
-        if (token[i] != '\0' && token[i] != ' ' && token[i] != '\t')
+            
+        // Sayı bittiğinde sonundaki karakter SADECE boşluk veya bitiş olabilir (Tab ise Error)
+        if (token[i] != '\0' && token[i] != ' ')
             error_exit(a, NULL);
+            
         k = 0;
         while (start < i)
             tmp[k++] = token[start++];
