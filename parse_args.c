@@ -49,37 +49,53 @@ static int  is_mode_flag(char *arg)
 */
 static void parse_token(char *token, t_stack **a)
 {
-    int     i;
-    int     start;
-    char    tmp[32];
-    int     val;
-    int     k;
+	int     i;
+	int     start;
+	char    tmp[32];
+	int     val;
+	int     k;
+	int     found_digit;
 
-    i = 0;
-    while (token[i])
-    {
-        while (token[i] == ' ' || token[i] == '\t')
-            i++;
-        if (!token[i])
-            break ;
-        start = i;
-        if (token[i] == '-' || token[i] == '+')
-            i++;
-        if (!token[i] || token[i] < '0' || token[i] > '9')
-            error_exit(a, NULL);
-        while (token[i] >= '0' && token[i] <= '9')
-            i++;
-        if (token[i] != '\0' && token[i] != ' ' && token[i] != '\t')
-            error_exit(a, NULL);
-        k = 0;
-        while (start < i)
-            tmp[k++] = token[start++];
-        tmp[k] = '\0';
-        ft_parse_int(tmp, &val, a);
-        if (is_duplicate(*a, val))
-            error_exit(a, NULL);
-        push_front(a, new_node(val));
-    }
+	if (!token || token[0] == '\0')
+		error_exit(a, NULL);
+	i = 0;
+	found_digit = 0;
+	while (token[i])
+	{
+		// 1. Tüm boşlukları (space, tab, newline vb.) atla
+		while (token[i] != '\0' && (token[i] == ' ' || (token[i] >= 9 && token[i] <= 13)))
+			i++;
+		if (!token[i])
+			break ;
+		start = i;
+		// İşaret kontrolü
+		if (token[i] == '-' || token[i] == '+')
+			i++;
+		// İşaretten sonra sayı gelmek zorunda
+		if (token[i] < '0' || token[i] > '9')
+			error_exit(a, NULL);
+		// Sayı olduğu sürece ilerle
+		while (token[i] >= '0' && token[i] <= '9')
+		{
+			found_digit = 1;
+			i++;
+		}
+		// 2. Sayıdan hemen sonra gelen karakter 'yasal' bir ayraç olmalı
+		// Yani ya string bitmeli ya da boşluk/tab gelmeli
+		if (token[i] != '\0' && token[i] != ' ' && !(token[i] >= 9 && token[i] <= 13))
+			error_exit(a, NULL);
+		// Sayıyı geçici stringe al
+		k = 0;
+		while (start < i && k < 31)
+			tmp[k++] = token[start++];
+		tmp[k] = '\0';
+		ft_parse_int(tmp, &val, a);
+		if (is_duplicate(*a, val))
+			error_exit(a, NULL);
+		push_front(a, new_node(val));
+	}
+	if (!found_digit)
+		error_exit(a, NULL);
 }
 
 void    parse_args(int argc, char **argv, t_stack **a,

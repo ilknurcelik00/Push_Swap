@@ -3,7 +3,7 @@ NAME	= push_swap
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 
-SRCS	= main.c \ #Silinecek
+SRCS	= main.c \
 		  bench.c \
 		  disorder.c \
 		  ft_utils.c \
