@@ -1,21 +1,21 @@
 NAME	= push_swap
 
-CC		= gcc
+CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 
-SRCS	= main.c \
-		  parse_args.c \
-		  stack_utils.c \
-		  ft_utils.c \
-		  disorder.c \
+SRCS	= main.c \ #Silinecek
 		  bench.c \
+		  disorder.c \
+		  ft_utils.c \
 		  ops_push.c \
 		  ops_rotate.c \
 		  ops_swap.c \
-		  sort_simple.c \
-		  sort_medium.c \
+		  parse_args.c \
+		  sort_adaptive.c \
 		  sort_complex.c \
-		  sort_adaptive.c
+		  sort_medium.c \
+		  sort_simple.c \
+		  stack_utils.c
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -24,7 +24,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
-%.o: %.c push_swap.h
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
