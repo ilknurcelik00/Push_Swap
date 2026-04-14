@@ -1,4 +1,31 @@
 #include "push_swap.h"
+
+static void	sort_three(t_stack **a)
+{
+	int	x;
+	int	y;
+	int	z;
+
+	x = (*a)->value;
+	y = (*a)->next->value;
+	z = (*a)->next->next->value;
+	if (x > y && y < z && x < z)
+		sa(a);
+	else if (x > y && y > z)
+	{
+		sa(a);
+		rra(a);
+	}
+	else if (x > y && y < z && x > z)
+		ra(a);
+	else if (x < y && y > z && x < z)
+	{
+		sa(a);
+		ra(a);
+	}
+	else
+		rra(a);
+}
 static int  find_min_pos(t_stack *stack)
 {
     int     pos;
@@ -38,8 +65,12 @@ void    sort_simple(t_stack **a, t_stack **b)
 {
     int size;
     int min_pos;
-
     size = stack_size(*a);
+    if (size == 3)
+        {
+            sort_three(a);
+            return ;
+        }
     while (size > 1)
     {
         min_pos = find_min_pos(*a);

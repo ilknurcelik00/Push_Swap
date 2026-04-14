@@ -34,6 +34,8 @@ void    print_bench(char *strategy, double disorder)
     ft_putstr_fd("Disorder: ", 2);
     ft_putnbr_fd((int)(disorder * 10000) / 100, 2);
     ft_putchar_fd('.', 2);
+    if ((int)(disorder * 10000) % 100 < 10)
+            ft_putchar_fd('0', 2);
     ft_putnbr_fd((int)(disorder * 10000) % 100, 2);
     ft_putstr_fd("%\n", 2);
     ft_putstr_fd("Strategy: ", 2);
