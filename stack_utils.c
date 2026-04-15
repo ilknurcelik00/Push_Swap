@@ -57,7 +57,6 @@ int	stack_size(t_stack *stack)
 	return (count);
 }
 
-/* Stack'in son node'unu döndür */
 t_stack	*stack_last(t_stack *stack)
 {
 	if (!stack)
