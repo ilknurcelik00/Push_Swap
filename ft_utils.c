@@ -53,36 +53,3 @@ void	ft_putnbr_fd(int n, int fd)
 	c = (char)(nb % 10 + '0');
 	ft_putchar_fd(c, fd);
 }
-
-void	ft_parse_int(const char *str, int *result, t_stack **a)
-{
-	long	val;
-	int		i;
-	int		sign;
-
-	i = 0;
-	sign = 1;
-	val = 0;
-	if (!str || !str[i])
-		error_exit(a, NULL);
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	if (!str[i])
-		error_exit(a, NULL);
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		val = val * 10 + (str[i] - '0');
-		if (sign == 1 && val > 2147483647)
-			error_exit(a, NULL);
-		if (sign == -1 && val > 2147483648L)
-			error_exit(a, NULL);
-		i++;
-	}
-	if (str[i] != '\0')
-		error_exit(a, NULL);
-	*result = (int)(val * sign);
-}

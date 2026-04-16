@@ -1,23 +1,27 @@
-NAME	= push_swap
+NAME    = push_swap
 
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
+CC      = cc
+CFLAGS  = -Wall -Wextra -Werror
 
-SRCS	= main.c \
-		  bench.c \
-		  disorder.c \
-		  ft_utils.c \
-		  ops_push.c \
-		  ops_rotate.c \
-		  ops_swap.c \
-		  parse_args.c \
-		  sort_adaptive.c \
-		  sort_complex.c \
-		  sort_medium.c \
-		  sort_simple.c \
-		  stack_utils.c
+SRCS    = main.c \
+          bench.c \
+          disorder.c \
+          ft_utils.c \
+          ft_utils2.c \
+          ops_push.c \
+          ops_rotate.c \
+          ops_rev_rotate.c \
+          ops_swap.c \
+          parse_args.c \
+          sort_adaptive.c \
+          sort_complex.c \
+          sort_medium.c \
+          sort_simple.c \
+          stack_utils.c \
+          stack_utils2.c \
+          stack_utils3.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS    = $(SRCS:.c=.o)
 
 all: $(NAME)
 

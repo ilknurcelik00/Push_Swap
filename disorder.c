@@ -1,10 +1,5 @@
 #include "push_swap.h"
 
-/*
-** stack_to_array: linked list'i geçici int dizisine çevir
-** compute_disorder içinde kullanmak için
-** Çağıran free etmekle sorumlu!
-*/
 static int	*stack_to_array(t_stack *stack, int size)
 {
 	int	*arr;
@@ -16,32 +11,43 @@ static int	*stack_to_array(t_stack *stack, int size)
 	i = 0;
 	while (stack)
 	{
-		arr[i++] = stack->value;
+		arr[i] = stack->value;
+		i++;
 		stack = stack->next;
 	}
 	return (arr);
 }
 
-/*
-** compute_disorder: stack'in ne kadar karışık olduğunu ölç
-**
-** Döndürür:
-**   0.0 → tamamen sıralı
-**   1.0 → tamamen ters sıralı
-**
-** Özel durumlar:
-**   0 veya 1 elemanlı stack → zaten sıralı → 0.0 döndür
-**   malloc başarısız        → güvenli taraf → 1.0 döndür
-**                             (en agresif algoritmayı seç)
-*/
+static double	calculate_ratio(int *arr, int size)
+{
+	int	i;
+	int	j;
+	int	mistakes;
+	int	total_pairs;
+
+	mistakes = 0;
+	total_pairs = 0;
+	i = -1;
+	while (++i < size)
+	{
+		j = i;
+		while (++j < size)
+		{
+			total_pairs++;
+			if (arr[i] > arr[j])
+				mistakes++;
+		}
+	}
+	if (total_pairs == 0)
+		return (0.0);
+	return ((double)mistakes / (double)total_pairs);
+}
+
 double	compute_disorder(t_stack *a)
 {
 	int		*arr;
 	int		size;
-	int		i;
-	int		j;
-	long	mistakes;
-	long	total_pairs;
+	double	ratio;
 
 	size = stack_size(a);
 	if (size <= 1)
@@ -49,21 +55,7 @@ double	compute_disorder(t_stack *a)
 	arr = stack_to_array(a, size);
 	if (!arr)
 		return (1.0);
-	mistakes = 0;
-	total_pairs = 0;
-	i = 0;
-	while (i < size)
-	{
-		j = i + 1;
-		while (j < size)
-		{
-			total_pairs++;
-			if (arr[i] > arr[j])
-				mistakes++;
-			j++;
-		}
-		i++;
-	}
+	ratio = calculate_ratio(arr, size);
 	free(arr);
-	return ((double)mistakes / (double)total_pairs);
+	return (ratio);
 }

@@ -1,54 +1,60 @@
 #include "push_swap.h"
 
-int	g_op_count = 0;
-int	g_count_only = 0;
-int	g_cnt_sa = 0;
-int	g_cnt_sb = 0;
-int	g_cnt_ss = 0;
-int	g_cnt_pa = 0;
-int	g_cnt_pb = 0;
-int	g_cnt_ra = 0;
-int	g_cnt_rb = 0;
-int	g_cnt_rr = 0;
-int	g_cnt_rra = 0;
-int	g_cnt_rrb = 0;
-int	g_cnt_rrr = 0;
-
-int	main(int argc, char **argv)
+static void init_config(t_config *cfg)
 {
-	t_stack	*a;
-	t_stack	*b;
-	char	*strategy;
-	int		count_only;
-	int		bench_mode;
-	double	disorder;
+    cfg->strategy = "--adaptive";
+    cfg->chosen = NULL;
+    cfg->bench_mode = 0;
+    cfg->op_count = 0;
+    cfg->count_only = 0;
+    cfg->cnt_sa = 0;
+    cfg->cnt_sb = 0;
+    cfg->cnt_ss = 0;
+    cfg->cnt_pa = 0;
+    cfg->cnt_pb = 0;
+    cfg->cnt_ra = 0;
+    cfg->cnt_rb = 0;
+    cfg->cnt_rr = 0;
+    cfg->cnt_rra = 0;
+    cfg->cnt_rrb = 0;
+    cfg->cnt_rrr = 0;
+}
 
-	a = NULL;
-	b = NULL;
-	parse_args(argc, argv, &a, &strategy, &count_only, &bench_mode);
-	if (!a || is_sorted(a))
-	{
-		free_stack(&a);
-		return (0);
-	}
-	g_count_only = count_only;
-	disorder = compute_disorder(a);
-	if (ft_strncmp(strategy, "--simple", 9) == 0)
-		sort_simple(&a, &b);
-	else if (ft_strncmp(strategy, "--medium", 9) == 0)
-		sort_medium(&a, &b);
-	else if (ft_strncmp(strategy, "--complex", 10) == 0)
-		sort_complex(&a, &b);
-	else
-		sort_adaptive(&a, &b);
-	if (count_only)
-	{
-		ft_putnbr_fd(g_op_count, 1);
-		ft_putchar_fd('\n', 1);
-	}
-	if (bench_mode)
-		print_bench(strategy, disorder);
-	free_stack(&a);
-	free_stack(&b);
-	return (0);
+static void execute_strategy(t_stack **a, t_stack **b, t_config *cfg)
+{
+    if (ft_strncmp(cfg->strategy, "--simple", 9) == 0)
+        sort_simple(a, b, cfg);
+    else if (ft_strncmp(cfg->strategy, "--medium", 9) == 0)
+        sort_medium(a, b, cfg);
+    else if (ft_strncmp(cfg->strategy, "--complex", 10) == 0)
+        sort_complex(a, b, cfg);
+    else
+        sort_adaptive(a, b, cfg);
+}
+
+int main(int argc, char **argv)
+{
+    t_stack     *a;
+    t_stack     *b;
+    t_config    cfg;
+    double      disorder;
+
+    if (argc < 2)
+        return (0);
+    a = NULL;
+    b = NULL;
+    init_config(&cfg);
+    parse_args(argc, argv, &a, &cfg);
+    if (is_sorted(a))
+    {
+        free_stack(&a);
+        return (0);
+    }
+    disorder = compute_disorder(a);
+    execute_strategy(&a, &b, &cfg);
+    if (cfg.bench_mode)
+        print_bench(&cfg, disorder);
+    free_stack(&a);
+    free_stack(&b);
+    return (0);
 }

@@ -10,20 +10,26 @@ static void	push(t_stack **dst, t_stack **src)
 	push_front(dst, node);
 }
 
-void	pa(t_stack **a, t_stack **b)
+void	pa(t_stack **a, t_stack **b, t_config *cfg)
 {
 	push(a, b);
-	g_op_count++;
-	g_cnt_pa++;
-	if (!g_count_only)
-		write(1, "pa\n", 3);
+	if (cfg)
+	{
+		cfg->op_count++;
+		cfg->cnt_pa++;
+		if (!cfg->count_only)
+			write(1, "pa\n", 3);
+	}
 }
 
-void	pb(t_stack **a, t_stack **b)
+void	pb(t_stack **a, t_stack **b, t_config *cfg)
 {
 	push(b, a);
-	g_op_count++;
-	g_cnt_pb++;
-	if (!g_count_only)
-		write(1, "pb\n", 3);
+	if (cfg)
+	{
+		cfg->op_count++;
+		cfg->cnt_pb++;
+		if (!cfg->count_only)
+			write(1, "pb\n", 3);
+	}
 }

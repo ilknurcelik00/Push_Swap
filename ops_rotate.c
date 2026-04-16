@@ -14,70 +14,39 @@ static void	rotate(t_stack **stack)
 	node->next = NULL;
 }
 
-static void	rev_rotate(t_stack **stack)
-{
-	t_stack	*last;
-
-	if (!*stack || !(*stack)->next)
-		return ;
-	last = stack_last(*stack);
-	last->prev->next = NULL;
-	last->prev = NULL;
-	push_front(stack, last);
-}
-
-void	ra(t_stack **a)
+void	ra(t_stack **a, t_config *cfg)
 {
 	rotate(a);
-	g_op_count++;
-	g_cnt_ra++;
-	if (!g_count_only)
-		write(1, "ra\n", 3);
+	if (cfg)
+	{
+		cfg->op_count++;
+		cfg->cnt_ra++;
+		if (!cfg->count_only)
+			write(1, "ra\n", 3);
+	}
 }
 
-void	rb(t_stack **b)
+void	rb(t_stack **b, t_config *cfg)
 {
 	rotate(b);
-	g_op_count++;
-	g_cnt_rb++;
-	if (!g_count_only)
-		write(1, "rb\n", 3);
+	if (cfg)
+	{
+		cfg->op_count++;
+		cfg->cnt_rb++;
+		if (!cfg->count_only)
+			write(1, "rb\n", 3);
+	}
 }
 
-void	rr(t_stack **a, t_stack **b)
+void	rr(t_stack **a, t_stack **b, t_config *cfg)
 {
 	rotate(a);
 	rotate(b);
-	g_op_count++;
-	g_cnt_rr++;
-	if (!g_count_only)
-		write(1, "rr\n", 3);
-}
-
-void	rra(t_stack **a)
-{
-	rev_rotate(a);
-	g_op_count++;
-	g_cnt_rra++;
-	if (!g_count_only)
-		write(1, "rra\n", 4);
-}
-
-void	rrb(t_stack **b)
-{
-	rev_rotate(b);
-	g_op_count++;
-	g_cnt_rrb++;
-	if (!g_count_only)
-		write(1, "rrb\n", 4);
-}
-
-void	rrr(t_stack **a, t_stack **b)
-{
-	rev_rotate(a);
-	rev_rotate(b);
-	g_op_count++;
-	g_cnt_rrr++;
-	if (!g_count_only)
-		write(1, "rrr\n", 4);
+	if (cfg)
+	{
+		cfg->op_count++;
+		cfg->cnt_rr++;
+		if (!cfg->count_only)
+			write(1, "rr\n", 3);
+	}
 }

@@ -1,128 +1,68 @@
 #include "push_swap.h"
 
-/* math.h YOK — kendi sqrt'ımızı kullanıyoruz */
-static int	ft_sqrt(int n)
-{
-	int	i;
-
-	i = 1;
-	while (i * i <= n)
-		i++;
-	return (i - 1);
-}
-
-static int	chunk_count(int n)
-{
-	int	chunks;
-
-	chunks = ft_sqrt(n);
-	if (chunks < 1)
-		chunks = 1;
-	return (chunks);
-}
-
-/*
-** in_chunk: bu index hangi chunk'a ait?
-** chunk_size = n / chunks
-** index / chunk_size bize chunk numarasını verir
-*/
-static int	in_chunk(int index, int target_chunk, int chunk_size)
-{
-	return (index / chunk_size == target_chunk);
-}
-
-/*
-** find_max_pos: b'deki en büyük elemanın tepeden kaç adım uzakta
-** olduğunu döndür — rb mi rrb mi kararını vermek için
-*/
-static int	find_max_pos(t_stack *stack)
-{
-	int	pos;
-	int	max_pos;
-	int	max_val;
-
-	pos = 0;
-	max_pos = 0;
-	max_val = stack->index;
-	while (stack)
-	{
-		if (stack->index > max_val)
-		{
-			max_val = stack->index;
-			max_pos = pos;
-		}
-		pos++;
-		stack = stack->next;
-	}
-	return (max_pos);
-}
-
-/*
-** bring_max_to_top: b'deki max'ı tepeye getir
-** max tepeden yakınsa rb, alttan yakınsa rrb kullan
-** bu operasyon sayısını minimize eder
-*/
-static void	bring_max_to_top(t_stack **b, int pos, int size)
+static void	bring_max_to_top(t_stack **b, int pos, int size, t_config *cfg)
 {
 	if (pos <= size / 2)
 	{
 		while (pos-- > 0)
-			rb(b);
+			rb(b, cfg);
 	}
 	else
 	{
 		pos = size - pos;
 		while (pos-- > 0)
-			rrb(b);
+			rrb(b, cfg);
 	}
 }
 
-/*
-** phase1: a'dan b'ye chunk chunk gönder
-** her chunk için: tüm a'yı tara, bu chunk'a ait olanları pb
-** ait olmayanları ra ile geç
-*/
-static void	phase1(t_stack **a, t_stack **b, int chunks, int chunk_size)
+static void	push_chunk(t_stack **a, t_stack **b, int ts[2], t_config *cfg)
 {
-	int	target;
 	int	pushed;
-	int	size;
 	int	rotated;
+	int	size;
 
-	target = 0;
-	while (target < chunks)
+	pushed = 0;
+	rotated = 0;
+	size = stack_size(*a);
+	while (pushed < ts[1] && rotated < size)
 	{
-		pushed = 0;
-		size = stack_size(*a);
-		rotated = 0;
-		while (pushed < chunk_size && rotated < size)
+		if (((*a)->index / ts[1]) == ts[0])
 		{
-			if (in_chunk((*a)->index, target, chunk_size))
-			{
-				pb(a, b);
-				pushed++;
-				size--;
-				rotated = 0;
-			}
-			else
-			{
-				ra(a);
-				rotated++;
-			}
+			pb(a, b, cfg);
+			pushed++;
+			size--;
+			rotated = 0;
 		}
-		target++;
+		else
+		{
+			ra(a, cfg);
+			rotated++;
+		}
 	}
-	/* kalan elemanları da b'ye at */
-	while (*a)
-		pb(a, b);
 }
 
-/*
-** phase2: b'den a'ya max'ı çekerek geri al
-** her seferinde b'deki en büyük index'li elemanı tepeye getir
-** pa ile a'ya ekle → a küçükten büyüğe dolacak
-*/
-static void	phase2(t_stack **a, t_stack **b)
+static void	phase1(t_stack **a, t_stack **b, t_config *cfg)
+{
+	int	ts[2];
+	int	n;
+	int	chunks;
+
+	n = stack_size(*a);
+	chunks = ft_sqrt(n);
+	if (chunks < 1)
+		chunks = 1;
+	ts[1] = n / chunks;
+	ts[0] = 0;
+	while (ts[0] < chunks)
+	{
+		push_chunk(a, b, ts, cfg);
+		ts[0]++;
+	}
+	while (*a)
+		pb(a, b, cfg);
+}
+
+static void	phase2(t_stack **a, t_stack **b, t_config *cfg)
 {
 	int	size;
 	int	max_pos;
@@ -131,28 +71,14 @@ static void	phase2(t_stack **a, t_stack **b)
 	{
 		size = stack_size(*b);
 		max_pos = find_max_pos(*b);
-		bring_max_to_top(b, max_pos, size);
-		pa(a, b);
+		bring_max_to_top(b, max_pos, size, cfg);
+		pa(a, b, cfg);
 	}
 }
 
-/*
-** sort_medium: O(n√n) chunk sort
-** 1. normalize: value → index (0..n-1)
-** 2. chunk_count hesapla
-** 3. phase1: chunk chunk b'ye gönder
-** 4. phase2: b'den max'ı çekerek a'ya sıralı geri al
-*/
-void	sort_medium(t_stack **a, t_stack **b)
+void	sort_medium(t_stack **a, t_stack **b, t_config *cfg)
 {
-	int n;
-	int chunks;
-	int chunk_size;
-
-	n = stack_size(*a);
 	normalize_stack(*a);
-	chunks = chunk_count(n);
-	chunk_size = n / chunks;
-	phase1(a, b, chunks, chunk_size);
-	phase2(a, b);
+	phase1(a, b, cfg);
+	phase2(a, b, cfg);
 }
