@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ops_rev_rotate.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ilcelik <ilcelik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/18 12:16:55 by ilcelik           #+#    #+#             */
+/*   Updated: 2026/04/18 12:16:57 by ilcelik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static void	rev_rotate(t_stack **stack)
@@ -19,8 +31,7 @@ void	rra(t_stack **a, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_rra++;
-		if (!cfg->count_only)
-			write(1, "rra\n", 4);
+		write(1, "rra\n", 4);
 	}
 }
 
@@ -31,8 +42,7 @@ void	rrb(t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_rrb++;
-		if (!cfg->count_only)
-			write(1, "rrb\n", 4);
+		write(1, "rrb\n", 4);
 	}
 }
 
@@ -44,7 +54,6 @@ void	rrr(t_stack **a, t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_rrr++;
-		if (!cfg->count_only)
-			write(1, "rrr\n", 4);
+		write(1, "rrr\n", 4);
 	}
 }

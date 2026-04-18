@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ops_rotate.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ilcelik <ilcelik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/18 12:17:02 by ilcelik           #+#    #+#             */
+/*   Updated: 2026/04/18 12:17:03 by ilcelik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static void	rotate(t_stack **stack)
@@ -21,8 +33,7 @@ void	ra(t_stack **a, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_ra++;
-		if (!cfg->count_only)
-			write(1, "ra\n", 3);
+		write(1, "ra\n", 3);
 	}
 }
 
@@ -33,8 +44,7 @@ void	rb(t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_rb++;
-		if (!cfg->count_only)
-			write(1, "rb\n", 3);
+		write(1, "rb\n", 3);
 	}
 }
 
@@ -46,7 +56,6 @@ void	rr(t_stack **a, t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_rr++;
-		if (!cfg->count_only)
-			write(1, "rr\n", 3);
+		write(1, "rr\n", 3);
 	}
 }

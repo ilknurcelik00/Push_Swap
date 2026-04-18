@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ilcelik <ilcelik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/18 12:18:38 by ilcelik           #+#    #+#             */
+/*   Updated: 2026/04/18 12:18:40 by ilcelik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
@@ -11,7 +23,6 @@ typedef struct s_config
 	char			*chosen;
 	int				bench_mode;
 	int				op_count;
-	int				count_only;
 	int				cnt_sa;
 	int				cnt_sb;
 	int				cnt_ss;
@@ -56,6 +67,7 @@ void				rrr(t_stack **a, t_stack **b, t_config *cfg);
 void				error_exit(t_stack **a, t_stack **b);
 void				parse_args(int argc, char **argv, t_stack **a,
 						t_config *config);
+void				parse_token(char *token, t_stack **a);
 double				compute_disorder(t_stack *a);
 void				sort_simple(t_stack **a, t_stack **b, t_config *cfg);
 void				sort_medium(t_stack **a, t_stack **b, t_config *cfg);

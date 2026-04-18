@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ops_push.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ilcelik <ilcelik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/18 12:16:49 by ilcelik           #+#    #+#             */
+/*   Updated: 2026/04/18 12:16:50 by ilcelik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static void	push(t_stack **dst, t_stack **src)
@@ -17,8 +29,7 @@ void	pa(t_stack **a, t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_pa++;
-		if (!cfg->count_only)
-			write(1, "pa\n", 3);
+		write(1, "pa\n", 3);
 	}
 }
 
@@ -29,7 +40,6 @@ void	pb(t_stack **a, t_stack **b, t_config *cfg)
 	{
 		cfg->op_count++;
 		cfg->cnt_pb++;
-		if (!cfg->count_only)
-			write(1, "pb\n", 3);
+		write(1, "pb\n", 3);
 	}
 }

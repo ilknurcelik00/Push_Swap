@@ -1,79 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_args.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ilcelik <ilcelik@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/18 12:13:01 by ilcelik           #+#    #+#             */
+/*   Updated: 2026/04/18 12:24:09 by ilcelik          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-static int	set_config_flag(char *arg, t_config *cfg)
+static char	*parse_strategy(char *arg)
 {
-	if (ft_strncmp(arg, "--simple", 9) == 0 || ft_strncmp(arg, "--medium",
-			9) == 0 || ft_strncmp(arg, "--complex", 10) == 0 || ft_strncmp(arg,
-			"--adaptive", 11) == 0)
-	{
-		cfg->strategy = arg;
-		return (1);
-	}
+	if (ft_strncmp(arg, "--simple", 9) == 0)
+		return ("--simple");
+	if (ft_strncmp(arg, "--medium", 9) == 0)
+		return ("--medium");
+	if (ft_strncmp(arg, "--complex", 10) == 0)
+		return ("--complex");
+	if (ft_strncmp(arg, "--adaptive", 11) == 0)
+		return ("--adaptive");
+	return (NULL);
+}
+
+static int	is_mode_flag(char *arg)
+{
 	if (ft_strncmp(arg, "--bench", 8) == 0)
-	{
-		cfg->bench_mode = 1;
 		return (1);
-	}
-	if (ft_strncmp(arg, "--count-only", 13) == 0)
-	{
-		cfg->count_only = 1;
-		return (1);
-	}
 	return (0);
 }
 
-static int	is_blank_token(char *token)
+static void	set_flag(t_config *cfg, char *arg)
 {
-	int	i;
-
-	if (!token || token[0] == '\0')
-		return (1);
-	i = 0;
-	while (token[i] == ' ')
-		i++;
-	return (token[i] == '\0');
+	if (parse_strategy(arg))
+		cfg->strategy = parse_strategy(arg);
+	else if (ft_strncmp(arg, "--bench", 8) == 0)
+		cfg->bench_mode = 1;
 }
 
-static void	extract_and_push(char *token, int start, int i, t_stack **a)
+static void	parse_flags(int *i, int argc, char **argv, t_config *cfg)
 {
-	char	tmp[32];
-	int		val;
-	int		k;
-
-	k = 0;
-	while (start < i)
-		tmp[k++] = token[start++];
-	tmp[k] = '\0';
-	ft_parse_int(tmp, &val, a);
-	if (is_duplicate(*a, val))
-		error_exit(a, NULL);
-	push_front(a, new_node(val));
-}
-
-static void	parse_token(char *token, t_stack **a)
-{
-	int	i;
-	int	start;
-
-	if (is_blank_token(token))
-		error_exit(a, NULL);
-	i = 0;
-	while (token[i])
+	while (*i < argc && (parse_strategy(argv[*i]) || is_mode_flag(argv[*i])))
 	{
-		while (token[i] == ' ')
-			i++;
-		if (!token[i])
-			break ;
-		start = i;
-		if (token[i] == '-' || token[i] == '+')
-			i++;
-		if (!token[i] || token[i] < '0' || token[i] > '9')
-			error_exit(a, NULL);
-		while (token[i] >= '0' && token[i] <= '9')
-			i++;
-		if (token[i] != '\0' && token[i] != ' ')
-			error_exit(a, NULL);
-		extract_and_push(token, start, i, a);
+		set_flag(cfg, argv[*i]);
+		(*i)++;
 	}
 }
 
@@ -84,11 +56,9 @@ void	parse_args(int argc, char **argv, t_stack **a, t_config *cfg)
 	if (argc == 1)
 		exit(0);
 	cfg->strategy = "--adaptive";
-	cfg->count_only = 0;
 	cfg->bench_mode = 0;
 	i = 1;
-	while (i < argc && set_config_flag(argv[i], cfg))
-		i++;
+	parse_flags(&i, argc, argv, cfg);
 	if (i >= argc)
 		exit(0);
 	while (i < argc)

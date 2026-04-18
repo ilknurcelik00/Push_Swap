@@ -13,6 +13,7 @@ SRCS    = main.c \
           ops_rev_rotate.c \
           ops_swap.c \
           parse_args.c \
+          parse_token.c \
           sort_adaptive.c \
           sort_complex.c \
           sort_medium.c \

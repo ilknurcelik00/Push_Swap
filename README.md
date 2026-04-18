@@ -66,7 +66,6 @@ make re       # Full rebuild
 
 ```bash
 ./push_swap --bench 5 4 3 2 1        # Show benchmark metrics on stderr
-./push_swap --count-only 5 4 3 2 1   # Print only total operation count
 ```
 
 Flags can be combined:
@@ -172,12 +171,10 @@ When no arguments are given or the input is already sorted, the program prints n
 - [Insertion/Selection sort with two stacks](https://en.wikipedia.org/wiki/Selection_sort)
 - [Counting inversions (disorder metric)](https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics))
 
-**AI usage:** Claude (Anthropic) was used to assist with:
+**AI usage:** AI was used to assist with:
 - Debugging the `parse_args` token parsing logic (`parse_args.c`)
 - Reviewing the disorder metric formula (`disorder.c`)
 - Generating and verifying the benchmark output format (`bench.c`)
-
-No AI was used to design or implement the core sorting algorithms (sort_simple, sort_medium, sort_complex, sort_adaptive).
 
 ---
 
@@ -185,18 +182,24 @@ No AI was used to design or implement the core sorting algorithms (sort_simple, 
 
 | File | Primary author |
 |------|---------------|
-| `main.c` | <login1> |
-| `parse_args.c` | <login1> |
-| `ft_utils.c` | <login1> |
-| `stack_utils.c` | <login2> |
-| `ops_push.c` | <login2> |
-| `ops_rotate.c` | <login2> |
-| `ops_swap.c` | <login2> |
-| `sort_simple.c` | <login1> |
-| `sort_medium.c` | <login2> |
-| `sort_complex.c` | <login1> |
-| `sort_adaptive.c` | <login1> |
-| `disorder.c` | <login2> |
-| `bench.c` | <login2> |
+| `main.c` | ilcelik |
+| `parse_args.c` | ilcelik |
+| `parse_token.c` | ilcelik |
+| `ft_utils.c` | ilcelik |
+| `ft_utils2.c` | ilcelik |
+| `stack_utils.c` | ssarican |
+| `stack_utils2.c` | ssarican |
+| `stack_utils3.c` | ssarican |
+| `ops_push.c` | ssarican |
+| `ops_rotate.c` | ssarican |
+| `ops_rev_rotate.c` | ssarican |
+| `ops_swap.c` | ssarican |
+| `sort_simple.c` | ilcelik |
+| `sort_medium.c` | ssarican |
+| `sort_complex.c` | ilcelik |
+| `sort_adaptive.c` | ilcelik |
+| `disorder.c` | ssarican |
+| `bench.c` | ssarican |
+| `push_swap.h` | ilcelik & ssarican |
 
 Both learners understand and can explain all parts of the codebase.
